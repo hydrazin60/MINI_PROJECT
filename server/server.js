@@ -1,10 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import router from "./routes/user.route.js";
+import router from "./routes/auth.route.js";
 
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 
@@ -15,7 +14,6 @@ if (!MONGODB_URL) {
   console.error("MONGODB_URL is not defined in environment variables.");
   process.exit(1);
 }
-
 mongoose
   .connect(MONGODB_URL)
   .then(() => {
@@ -25,9 +23,9 @@ mongoose
     console.error("Database connection error:", error);
     process.exit(1);
   });
-
-app.use("/miniproject/v1/user" , router )
   
+//  
+app.use("/miniproject/v1/auth" ,  router)
 
 
 app.listen(PORT, () => {
