@@ -10,7 +10,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 const MONGODB_URL = process.env.MONGODB_URL;
-
 if (!MONGODB_URL) {
   console.error("MONGODB_URL is not defined in environment variables.");
   process.exit(1);
