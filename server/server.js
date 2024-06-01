@@ -7,7 +7,6 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-
 const PORT = process.env.PORT || 8080;
 const MONGODB_URL = process.env.MONGODB_URL;
 if (!MONGODB_URL) {
@@ -23,10 +22,19 @@ mongoose
     console.error("Database connection error:", error);
     process.exit(1);
   });
-  
-//  
-app.use("/miniproject/v1/auth" ,  router)
 
+//
+app.use("/miniproject/v1/auth", router);
+//  error handling
+app.use((err, req, res, next) => {
+  const statusCode = req.statusCode || 500;
+  const message = err.message || "Internal server Error";
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on PORT ${PORT}`);
