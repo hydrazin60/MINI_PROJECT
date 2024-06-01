@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import router from "./routes/user.route.js";
 
 dotenv.config();
 
@@ -24,6 +25,10 @@ mongoose
     console.error("Database connection error:", error);
     process.exit(1);
   });
+
+app.use("/miniproject/v1/user" , router )
+  
+
 
 app.listen(PORT, () => {
   console.log(`Server running on PORT ${PORT}`);
