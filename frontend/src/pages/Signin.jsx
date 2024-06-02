@@ -1,29 +1,55 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
- 
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ });
+  const [formData, setFormData] = useState({});
 
   const { email, password } = formData;
- 
- function onChange(e) {
- 
+
+  function onChange(e) {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if(!formData.email || !formData.password){
-      setErrorMessage("Plight all fild are require");
+    try {
+      setLoading(true);
+      e.preventDefault();
+      if (!formData.email || !formData.password) {
+        setErrorMessage("Plight all fild are require");
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+      }
+      const res = await fetch("/", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.sucess === false) {
+        errorMessage(data.message);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+        setLoading(false);
+        return;
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("all error occuring during sign in");
       setTimeout(() => {
-        setErrorMessage(null)
-      },  3000);
+        setErrorMessage(null);
+      }, 2000);
+      setLoading(false);
     }
-      
   };
 
   return (
@@ -39,7 +65,7 @@ export default function SignIn() {
             alt="key picture"
           />
           <span className="signin-page-write-container inline-block p-3 mt-2 circular-border-animation">
-          <p className="Sign-In-Page-write">
+            <p className="Sign-In-Page-write">
               This project is a full-stack application built with the MERN stack
               (MongoDB, Express.js, React.js, Node.js) that allows users to
               create an account, update their profile, and manage their personal
@@ -50,7 +76,7 @@ export default function SignIn() {
         </div>
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20     text-black font-bold">
           <form onSubmit={handleSubmit}>
-          <label>Email Account*</label>
+            <label>Email Account*</label>
             <input
               className="mb-6 rounded-2xl border-2 w-full px-4 py-2 text-xl text-gray-700 bg-white  border-black transition ease-in-out"
               type="email"
@@ -60,7 +86,7 @@ export default function SignIn() {
               placeholder="Enter your email account!"
             />
             <div className="relative mb-6">
-            <label>Email  Password*</label>
+              <label>Email Password*</label>
               <input
                 className="w-full rounded-2xl border-2 px-4 py-2 text-xl text-gray-700 bg-white  border-black transition ease-in-out"
                 type={showPassword ? "text" : "password"}
@@ -112,11 +138,9 @@ export default function SignIn() {
             <div className="my-4 flex items-center before:border-t before:flex-1 before:border-gray-400 after:border-t after:flex-1 after:border-gray-400">
               <p className="text-center font-semibold mx-4">OR</p>
             </div>
-            
           </form>
         </div>
       </div>
     </section>
   );
 }
- 
