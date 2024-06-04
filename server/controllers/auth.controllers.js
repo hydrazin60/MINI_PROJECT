@@ -46,7 +46,8 @@ const token = jwt.sign({id : valitUser._id}, process.env.JWT_SECRET)
 // const token = jwt.sign({ id: foundUser._id }, process.env.JWT_SECRET, {
 //   expiresIn: '1h', // Add an expiration time for better security
 // });
-res.cookie('access_token' , token , {httpOnly: true} ).status(200).json({ message : "Login sucessful" , user : valitUser})
+const {password : hashPassword , ...userResponse} = valitUser._doc
+res.cookie('access_token' , token , {httpOnly: true} ).status(200).json({ message : "Login sucessful" , user : userResponse})
   } catch (err) {
     console.error(err);
     next(errorHandler(500, 'Internal Server Error'));
