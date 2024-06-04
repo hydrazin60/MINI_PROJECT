@@ -16,17 +16,21 @@ export default function SignIn() {
   }
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
-      e.preventDefault();
+      setErrorMessage(false)
       if (!formData.email || !formData.password) {
         setErrorMessage("Plight all fild are require");
         setTimeout(() => {
           setErrorMessage(null);
         }, 3000);
       }
-      const res = await fetch("/", {
+      const res = await fetch("/miniproject/v1/auth/signin",{
         method: "POST",
+        headers : {
+       'Content-Type'  :"application/json"
+        },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
@@ -86,7 +90,7 @@ export default function SignIn() {
               placeholder="Enter your email account!"
             />
             <div className="relative mb-6">
-              <label>Email Password*</label>
+              <label>Password*</label>
               <input
                 className="w-full rounded-2xl border-2 px-4 py-2 text-xl text-gray-700 bg-white  border-black transition ease-in-out"
                 type={showPassword ? "text" : "password"}

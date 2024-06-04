@@ -31,7 +31,7 @@ export default function Signup() {
       });
       const data = await res.json();
       if (res.ok) {
-        navigate("/");
+        navigate("/sign-in");
       } else {
         setErrorMessage(data.message || "An error occurred during signup");
         setTimeout(() => {
