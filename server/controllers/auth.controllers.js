@@ -43,8 +43,8 @@ export const signin = async (req, res, next) => {
     const validPassword = bcryptjs.compareSync(password, valitUser.password);
     if (!validPassword) return next(errorHandler(404, "Invalide Password"));
     // const token = jwt.sign({ id: valitUser._id }, process.env.JWT_SECRET);
-    const token = jwt.sign({ id:  valitUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '24h', // Add an expiration time for better security
+    const token = jwt.sign({ id: valitUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "24h", // Add an expiration time for better security
     });
     const { password: hashPassword, ...userResponse } = valitUser._doc;
     res
@@ -56,5 +56,3 @@ export const signin = async (req, res, next) => {
     next(errorHandler(500, "Internal Server Error"));
   }
 };
-
- 
